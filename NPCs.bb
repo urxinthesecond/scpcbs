@@ -5,6 +5,7 @@ Const NPCtype372% = 6, NPCtypeApache% = 7, NPCtypeMTF% = 8, NPCtype096 = 9
 Const NPCtype049% = 10, NPCtypeZombie% = 11, NPCtype5131% = 12, NPCtypeTentacle% = 13
 Const NPCtype860% = 14, NPCtype939% = 15, NPCtype066% = 16, NPCtypePdPlane% = 17
 Const NPCtype966% = 18, NPCtype1048a = 19, NPCtype1499% = 20, NPCtype008% = 21, NPCtypeClerk% = 22
+
 ;[End Block]
 
 Type NPCs
@@ -68,6 +69,7 @@ Type NPCs
 	Field IdleTimer#
 	Field SoundChn_IsStream%,SoundChn2_IsStream%
 	Field FallingPickDistance#
+	
 End Type
 
 Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
@@ -161,7 +163,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityType n\Collider, HIT_PLAYER
 			;EntityPickMode n\Collider, 1
 			n\obj = CopyEntity(MTFObj) ;LoadAnimMesh_Strict("GFX\npcs\mtf.b3d")
-			
+
 			n\Speed = (GetINIFloat("DATA\NPCs.ini", "MTF", "speed") / 100.0)
 			
 			temp# = (GetINIFloat("DATA\NPCs.ini", "MTF", "scale") / 2.5)
@@ -277,6 +279,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			If HorrorSFX(13)=0 Then HorrorSFX(13)=LoadSound_Strict("SFX\Horror\Horror13.ogg")
 			
 			n\CanUseElevator = True
+			n\HP = 500
 			;[End Block]
 		Case NPCtypeZombie
 			;[Block]
@@ -308,7 +311,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			n\Sound = LoadSound_Strict("SFX\SCP\049\0492Breath.ogg")
 			
-			n\HP = 100
+			n\HP = 150
 			;[End Block]
 		Case NPCtypeApache
 			;[Block]
@@ -527,6 +530,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			EntityType n\Collider,HIT_PLAYER
 			
 			n\Speed = (GetINIFloat("DATA\NPCs.ini", "SCP-966", "speed") / 100.0)
+			
 			;[End Block]
 		Case NPCtype1048a
 			;[Block]
@@ -584,7 +588,7 @@ Function CreateNPC.NPCs(NPCtype%, x#, y#, z#)
 			
 			n\Sound = LoadSound_Strict("SFX\SCP\049\0492Breath.ogg")
 			
-			n\HP = 120
+			n\HP = 100
 			;[End Block]
 		Case NPCtypeClerk
 			;[Block]
@@ -1663,7 +1667,12 @@ Function UpdateNPCs()
 				;n\state = the "main state" of the NPC
 				;n\state2 = attacks the player when the value is above 0.0
 				;n\state3 = timer for updating the path again
-				
+				;If (Not n\IsDead)
+				If n\IsDead
+					AnimateNPC(n, 537, 660, 0.7, False);placeholder anim
+					EntityType n\Collider,HIT_DEAD
+					Else
+					
 				prevFrame# = n\Frame
 				
 				dist  = EntityDistance(Collider, n\Collider)
@@ -2140,6 +2149,7 @@ Function UpdateNPCs()
 							EndIf
 							;[End Block]
 					End Select
+				EndIf
 				EndIf
 				
 				PositionEntity(n\obj, EntityX(n\Collider), EntityY(n\Collider)-0.22, EntityZ(n\Collider))
@@ -4988,6 +4998,7 @@ Function UpdateNPCs()
 						FreeSound_Strict n\Sound
 						n\Sound = 0
 					EndIf
+					;note-death frames
 					AnimateNPC(n, 344, 363, 0.5, False)
 				EndIf
 				
@@ -5641,10 +5652,10 @@ Function UpdateMTFUnit(n.NPCs)
 				EndIf
 				
 				For n2.NPCs = Each NPCs
-					If n2\NPCtype = NPCtype049
+					If n2\NPCtype = NPCtype049 And n2\IsDead = False
 						If OtherNPCSeesMeNPC(n2,n) Then
 							If EntityVisible(n\Collider,n2\Collider)
-								n\State = 4
+								n\State = 9 ;4
 								n\EnemyX = EntityX(n2\Collider,True)
 								n\EnemyY = EntityY(n2\Collider,True)
 								n\EnemyZ = EntityZ(n2\Collider,True)
@@ -5997,10 +6008,10 @@ Function UpdateMTFUnit(n.NPCs)
 				EndIf
 				
 				For n2.NPCs = Each NPCs
-					If n2\NPCtype = NPCtype049
+					If n2\NPCtype = NPCtype049 And n2\IsDead = False
 						If OtherNPCSeesMeNPC(n2,n) Then
 							If EntityVisible(n\Collider,n2\Collider)
-								n\State = 4
+								n\State = 9 ;4
 								n\EnemyX = EntityX(n2\Collider,True)
 								n\EnemyY = EntityY(n2\Collider,True)
 								n\EnemyZ = EntityZ(n2\Collider,True)
