@@ -3499,7 +3499,7 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[3] = CreateDoor(r\zone, r\x - 2766.0 * RoomScale, -3520.0 * RoomScale, r\z - 1592.0 * RoomScale, 0, r, False, 3)
 			r\RoomDoors[3]\AutoClose = False : r\RoomDoors[3]\open = False		
 			PositionEntity(r\RoomDoors[3]\buttons[0], r\x - 2581.0 * RoomScale, EntityY(r\RoomDoors[3]\buttons[0],True), r\z - 1631.0 * RoomScale, True)
-			PositionEntity(r\RoomDoors[3]\buttons[1], r\x - 2951.0 * RoomScale, EntityY(r\RoomDoors[3]\buttons[1],True), r\z - 1553.0 * RoomScale, True)	
+			PositionEntity(r\RoomDoors[3]\buttons[1], r\x - 2951.0 * RoomScale, EntityY(r\RoomDoors[3]\buttons[1],True), r\z - 1553.0 * RoomScale, True)
 			
 			;For i = 0 To 3
 			;	If (i Mod 2) = 1
@@ -3517,6 +3517,13 @@ Function FillRoom(r.Rooms)
 			r\RoomDoors[6] = CreateDoor(r\zone, r\x - 264.0 * RoomScale, -3520.0 * RoomScale, r\z + 1824.0 * RoomScale, 90, r, False)
 			r\RoomDoors[6]\AutoClose = False : r\RoomDoors[6]\open = True : r\RoomDoors[6]\locked = True
 			
+			r\RoomDoors[7] = CreateDoor(r\zone, r\x - 272.0 * RoomScale, -3552.0 * RoomScale, r\z + 96.0 * RoomScale, -90, r, False, 1)
+			r\RoomDoors[7]\AutoClose = False : r\RoomDoors[7]\open = False
+			PositionEntity(r\RoomDoors[7]\buttons[0], r\x - 240.0 * RoomScale, EntityY(r\RoomDoors[7]\buttons[0],True), r\z - 480.0 * RoomScale, True)
+			RotateEntity(r\RoomDoors[7]\Buttons[0], 0, 180, 0)
+			PositionEntity(r\RoomDoors[7]\buttons[1], r\x - 330.0 * RoomScale, EntityY(r\RoomDoors[7]\buttons[1],True), r\z + 656.0 * RoomScale, True)
+			RotateEntity(r\RoomDoors[7]\Buttons[1], 0, 180, 0)
+			
 			d.Doors = CreateDoor(0, r\x,0,r\z, 0, r, False, 2, -2)
 			
 			it = CreateItem("Document SCP-049", "paper", r\x - 608.0 * RoomScale, r\y - 3332.0 * RoomScale, r\z + 876.0 * RoomScale)
@@ -3527,12 +3534,6 @@ Function FillRoom(r.Rooms)
 			
 			it = CreateItem("First Aid Kit", "firstaid", r\x +385.0 * RoomScale, r\y - 3412.0 * RoomScale, r\z + 271.0 * RoomScale)
 			EntityParent(it\collider, r\obj)
-			
-			d = CreateDoor(r\zone,r\x-272.0*RoomScale,r\y-3552.0*RoomScale,r\z+98.0*RoomScale,90,r,True,True)
-			d\AutoClose = False : d\open = True : d\MTFClose = False : d\locked = True
-			For i = 0 To 1
-				FreeEntity(d\buttons[i]) : d\buttons[i]=0
-			Next
 			
 			d = CreateDoor(r\zone,r\x-2990.0*RoomScale,r\y-3520.0*RoomScale,r\z-1824.0*RoomScale,90,r,False,2)
 			d\locked = True : d\DisableWaypoint = True
